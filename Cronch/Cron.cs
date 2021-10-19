@@ -36,15 +36,6 @@ namespace Cronch
                 && GetDayValid(dateTime);
         }
 
-        private bool GetDayValid(DateTime dateTime)
-        {
-            bool dayMatch = _nodes[_day].Match(dateTime.Day);
-            bool dowMatch = _nodes[_dow].Match((int)dateTime.DayOfWeek);
-            if (_nodes[_day] is WildcardCronNode || _nodes[_dow] is WildcardCronNode)
-                return dayMatch && dowMatch;
-            return dayMatch || dowMatch;
-        }
-
         public override string ToString()
         {
             return string.Join<ICronNode>(' ', _nodes);
@@ -78,6 +69,15 @@ namespace Cronch
             var low = int.Parse(items[0]);
             var high = int.Parse(items[1]);
             return new RangeCronNode(low, high);
+        }
+
+        private bool GetDayValid(DateTime dateTime)
+        {
+            bool dayMatch = _nodes[_day].Match(dateTime.Day);
+            bool dowMatch = _nodes[_dow].Match((int)dateTime.DayOfWeek);
+            if (_nodes[_day] is WildcardCronNode || _nodes[_dow] is WildcardCronNode)
+                return dayMatch && dowMatch;
+            return dayMatch || dowMatch;
         }
     }
 }
